@@ -28,9 +28,7 @@ function love.update(dt)
 end
 
 function love.draw()
-    for i,v in ipairs(objects) do
-        v:draw()
+    for i, object in pairs(objects) do
+        object:draw()
     end
-    player:draw()
-    wall:draw()
 end
