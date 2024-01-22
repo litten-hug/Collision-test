@@ -12,11 +12,14 @@ function Entity:new(x, y, image_path)
     self.last.y = self.y
 
     self.strength = 0
+
+    self.tempStrength = 0
 end
 
 function Entity:update(dt)
     self.last.x = self.x
     self.last.y = self.y
+    self.tempStrength = self.strength
 end
 
 function Entity:draw()
@@ -39,31 +42,30 @@ function Entity:wasHorizontallyAligned(e)
 end
 
 function Entity:resolveCollision(e)
-    if self.strength > e.strength then
-        e:resolveCollision(self)
-        return
+    if self.tempStrength > e.tempStrength then
+    -- if self.strength > e.strength then
+        return e:resolveCollision(self)
     end
     if self:checkCollision(e) then
+        self.tempStrength = e.tempStrength
         if self:wasVerticallyAligned(e) then
             if self.x + self.width/2 < e.x + e.width/2  then
-                -- pusback = the right side of the player - the left side of the wall
                 local pushback = self.x + self.width - e.x
                 self.x = self.x - pushback
             else
-                -- pusback = the right side of the wall - the left side of the player
                 local pushback = e.x + e.width - self.x
                 self.x = self.x + pushback
             end
         elseif self:wasHorizontallyAligned(e) then
             if self.y + self.height/2 < e.y + e.height/2 then
-                -- pusback = the bottom side of the player - the top side of the wall
                 local pushback = self.y + self.height - e.y
                 self.y = self.y - pushback
             else
-                -- pusback = the bottom side of the wall - the top side of the player
                 local pushback = e.y + e.height - self.y
                 self.y = self.y + pushback
             end
         end
+        return true
     end
+    return false
 end
