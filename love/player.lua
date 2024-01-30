@@ -14,7 +14,6 @@ function Player:update(dt)
     end
     if love.keyboard.isDown("up", "w") then
         self.y = self.y - 200 * dt
-    elseif love.keyboard.isDown("down", "s") then
-        self.y = self.y + 200 * dt
     end
+    self.y = self.y + 200 * dt    
 end
