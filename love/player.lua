@@ -12,8 +12,9 @@ function Player:update(dt)
     elseif love.keyboard.isDown("right", "d") then
         self.x = self.x + 200 * dt
     end
-    if love.keyboard.isDown("up", "w") then
-        self.y = self.y - 200 * dt
-    end
-    self.y = self.y + 200 * dt    
+     self.y = self.y + 200 * dt
+end
+
+function Player:jump()
+    self.gravity = -700
 end

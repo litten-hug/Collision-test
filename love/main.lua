@@ -4,10 +4,9 @@ function love.load()
     require "player"
     require "wall"
     require "box"
-
+    player = Player(100, 100)
     objects = {
-        Player(100, 100),
-        Box(400, 150),
+        player, Box(400, 150)
     }
 
     walls = {}
@@ -33,6 +32,12 @@ function love.load()
                 table.insert(walls, Wall((j-1)*50, (i-1)*50))
             end
         end
+    end
+end
+
+function love.keypressed(key)
+    if key == "space" then
+        player:jump()
     end
 end
 
