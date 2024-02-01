@@ -1,4 +1,5 @@
 function love.load()
+    love.graphics.setDefaultFilter("nearest", "nearest")
     Object = require "classic"
     require "entity"
     require "player"

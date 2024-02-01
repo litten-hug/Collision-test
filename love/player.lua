@@ -1,7 +1,7 @@
 Player = Entity:extend()
 
 function Player:new(x, y)
-    Player.super.new(self, x, y, "assets/player.png")
+    Player.super.new(self, x, y, "assets/player.png", 5.5)
     self.strength = 50
 end
 

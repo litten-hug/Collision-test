@@ -1,11 +1,12 @@
 Entity = Object:extend()
 
-function Entity:new(x, y, image_path)
+function Entity:new(x, y, image_path, imageScale)
+    self.imageScale = imageScale
     self.x = x
     self.y = y
     self.image = love.graphics.newImage(image_path)
-    self.width = self.image:getWidth()
-    self.height = self.image:getHeight()
+    self.width = self.image:getWidth() * self.imageScale
+    self.height = self.image:getHeight() * self.imageScale
 
     self.last = {}
     self.last.x = self.x
@@ -26,7 +27,7 @@ function Entity:update(dt)
 end
 
 function Entity:draw()
-    love.graphics.draw(self.image, self.x, self.y)
+    love.graphics.draw(self.image, self.x, self.y, 0, self.imageScale, self.imageScale)
 end
 
 function Entity:checkCollision(e)
@@ -46,7 +47,6 @@ end
 
 function Entity:resolveCollision(e)
     if self.tempStrength > e.tempStrength then
-    -- if self.strength > e.strength then
         return e:resolveCollision(self)
     end
     if self:checkCollision(e) then
