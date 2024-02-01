@@ -12,14 +12,17 @@ function Entity:new(x, y, image_path)
     self.last.y = self.y
 
     self.strength = 0
-
     self.tempStrength = 0
+    self.gravity = 0
+    self.weight = 400
 end
 
 function Entity:update(dt)
     self.last.x = self.x
     self.last.y = self.y
     self.tempStrength = self.strength
+    self.gravity = self.gravity + self.weight * dt * 2
+    self.y = self.y + self.gravity * dt
 end
 
 function Entity:draw()
@@ -60,6 +63,7 @@ function Entity:resolveCollision(e)
             if self.y + self.height/2 < e.y + e.height/2 then
                 local pushback = self.y + self.height - e.y
                 self.y = self.y - pushback
+                self.gravity = 0
             else
                 local pushback = e.y + e.height - self.y
                 self.y = self.y + pushback
