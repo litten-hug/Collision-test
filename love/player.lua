@@ -3,6 +3,7 @@ Player = Entity:extend()
 function Player:new(x, y)
     Player.super.new(self, x, y, "assets/xavier_right.png", 5.5)
     self.strength = 50
+    self.jumpsLeft = 2
 end
 
 function Player:update(dt)
@@ -18,5 +19,12 @@ function Player:update(dt)
 end
 
 function Player:jump()
-    self.gravity = -700
+    if self.jumpsLeft > 0 then
+        self.gravity = -700
+        self.jumpsLeft = self.jumpsLeft - 1
+    end
+end
+
+function Player:collideWithFloor()
+    self.jumpsLeft = 2
 end

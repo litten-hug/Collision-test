@@ -64,6 +64,7 @@ function Entity:resolveCollision(e)
                 local pushback = self.y + self.height - e.y
                 self.y = self.y - pushback
                 self.gravity = 0
+                self:collideWithFloor()
             else
                 local pushback = e.y + e.height - self.y
                 self.y = self.y + pushback
@@ -72,4 +73,7 @@ function Entity:resolveCollision(e)
         return true
     end
     return false
+end
+
+function Entity:collideWithFloor()
 end
