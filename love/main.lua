@@ -63,12 +63,18 @@ function love.update(dt)
 
         for i=1,#objects-1 do
             for j=i+1,#objects do
-                keepChecking = objects[i]:resolveCollision(objects[j])
+                collision = objects[i]:resolveCollision(objects[j])
+                if collision then
+                    keepChecking = true
+                end
             end
         end
         for i,wall in ipairs(walls) do
             for j,object in ipairs(objects) do
-                keepChecking = keepChecking or object:resolveCollision(wall)
+                collision = object:resolveCollision(wall)
+                if collision then
+                    keepChecking = true
+                end
             end
         end
 
