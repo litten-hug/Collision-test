@@ -51,11 +51,11 @@ function love.update(dt)
         wall:update(dt)
     end
 
-    local loop = true
+    local keepChecking = true
     local limit = 0
 
-    while loop do
-        loop = false
+    while keepChecking do
+        keepChecking = false
         limit = limit + 1
         if limit > 100 then
             break
@@ -63,12 +63,12 @@ function love.update(dt)
 
         for i=1,#objects-1 do
             for j=i+1,#objects do
-                loop = objects[i]:resolveCollision(objects[j])
+                keepChecking = objects[i]:resolveCollision(objects[j])
             end
         end
         for i,wall in ipairs(walls) do
             for j,object in ipairs(objects) do
-                loop = object:resolveCollision(wall)
+                keepChecking = keepChecking or object:resolveCollision(wall)
             end
         end
 
