@@ -20,17 +20,23 @@ function love.load()
         {2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2},
         {2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2},
         {2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1},
-        {2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2},
-        {2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2},
+        {2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3},
+        {2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3},
         {2, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-        {2, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2},
+        {2, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3},
         {2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
     }
+
+    backgrounds = {}
 
     for i,v in ipairs(map) do
         for j, wallType in ipairs(v) do
             if wallType > 0 then
-                table.insert(walls, Wall((j-1)*50, (i-1)*50, wallType))
+                if wallType == 3 then
+                    table.insert(backgrounds, Wall((j-1)*50, (i-1)*50, wallType))
+                else
+                    table.insert(walls, Wall((j-1)*50, (i-1)*50, wallType))
+                end
             end
         end
     end
@@ -47,8 +53,12 @@ function love.update(dt)
         object:update(dt)
     end
 
-    for i,wall in ipairs(walls) do
+    for i, wall in ipairs(walls) do
         wall:update(dt)
+    end
+    
+    for i, background in ipairs(backgrounds) do
+        background:update(dt)
     end
 
     local keepChecking = true
@@ -83,11 +93,15 @@ function love.update(dt)
 end
 
 function love.draw()
-    for i, object in pairs(objects) do
-        object:draw()
+    for i,background in ipairs(backgrounds) do
+        background:draw()
     end
 
     for i,wall in ipairs(walls) do
         wall:draw()
+    end
+
+    for i, object in pairs(objects) do
+        object:draw()
     end
 end

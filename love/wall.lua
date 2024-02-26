@@ -5,3 +5,6 @@ function Wall:new(x, y, wallType)
     self.strength = 100
     self.weight = 0
 end
+
+function Wall:resolveCollision(e)
+end
