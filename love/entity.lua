@@ -53,21 +53,15 @@ function Entity:resolveCollision(e)
         self.tempStrength = e.tempStrength
         if self:wasVerticallyAligned(e) then
             if self.x + self.width/2 < e.x + e.width/2  then
-                local pushback = self.x + self.width - e.x
-                self.x = self.x - pushback
+                self:collide(e, "left")
             else
-                local pushback = e.x + e.width - self.x
-                self.x = self.x + pushback
+                self:collide(e, "right")
             end
         elseif self:wasHorizontallyAligned(e) then
             if self.y + self.height/2 < e.y + e.height/2 then
-                local pushback = self.y + self.height - e.y
-                self.y = self.y - pushback
-                self.gravity = 0
-                self:collideWithFloor()
+                self:collide(e, "above")
             else
-                local pushback = e.y + e.height - self.y
-                self.y = self.y + pushback
+                self:collide(e, "below")
             end
         end
         return true
@@ -75,5 +69,19 @@ function Entity:resolveCollision(e)
     return false
 end
 
-function Entity:collideWithFloor()
+function Entity:collide(other, fromDirection)
+    if fromDirection == "above" then
+        local pushback = self.y + self.height - other.y
+        self.y = self.y - pushback
+        self.gravity = 0
+    elseif fromDirection == "below" then
+        local pushback = other.y + other.height - self.y
+        self.y = self.y + pushback
+    elseif fromDirection == "left" then
+        local pushback = self.x + self.width - other.x
+        self.x = self.x - pushback
+    elseif fromDirection == "right" then
+        local pushback = other.x + other.width - self.x
+        self.x = self.x + pushback
+    end
 end

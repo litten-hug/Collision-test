@@ -67,6 +67,9 @@ function Player:jump()
     end
 end
 
-function Player:collideWithFloor()
-    self.jumpsLeft = 2
+function Player:collide(e, fromDirection)
+    Player.super.collide(self, e, fromDirection)
+    if fromDirection == "above" then
+        self.jumpsLeft = 2
+    end
 end
