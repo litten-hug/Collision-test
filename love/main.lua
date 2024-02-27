@@ -20,15 +20,16 @@ function love.load()
         {2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2},
         {2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2},
         {2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1},
-        {2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2},
-        {2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2},
+        {2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 2},
+        {2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 2},
         {2, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-        {2, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2},
+        {2, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 2},
         {2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
     }
 
     for i,v in ipairs(map) do
         for j, wallType in ipairs(v) do
+            -- if wallType == 3 then create a "Background" tile instead of a Wall
             if wallType > 0 then
                 table.insert(walls, Wall((j-1)*50, (i-1)*50, wallType))
             end
@@ -83,11 +84,11 @@ function love.update(dt)
 end
 
 function love.draw()
-    for i, object in pairs(objects) do
-        object:draw()
-    end
-
     for i,wall in ipairs(walls) do
         wall:draw()
+    end
+
+    for i, object in pairs(objects) do
+        object:draw()
     end
 end

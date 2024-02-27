@@ -30,43 +30,53 @@ function Entity:draw()
     love.graphics.draw(self.image, self.x, self.y, 0, self.imageScale, self.imageScale)
 end
 
-function Entity:checkCollision(e)
-    return self.x + self.width > e.x
-    and self.x < e.x + e.width
-    and self.y + self.height > e.y
-    and self.y < e.y + e.height
+function Entity:checkCollision(other)
+    return self.x + self.width > other.x
+    and self.x < other.x + other.width
+    and self.y + self.height > other.y
+    and self.y < other.y + other.height
 end
 
-function Entity:wasVerticallyAligned(e)
-    return self.last.y < e.last.y + e.height and self.last.y + self.height > e.last.y
+function Entity:wasVerticallyAligned(other)
+    return self.last.y < other.last.y + other.height and self.last.y + self.height > other.last.y
 end
 
-function Entity:wasHorizontallyAligned(e)
-    return self.last.x < e.last.x + e.width and self.last.x + self.width > e.last.x
+function Entity:wasHorizontallyAligned(other)
+    return self.last.x < other.last.x + other.width and self.last.x + self.width > other.last.x
 end
 
-function Entity:resolveCollision(e)
-    if self.tempStrength > e.tempStrength then
-        return e:resolveCollision(self)
+function Entity:resolveCollision(other)
+    if self.tempStrength > other.tempStrength then
+        return other:resolveCollision(self)
     end
-    if self:checkCollision(e) then
-        self.tempStrength = e.tempStrength
-        if self:wasVerticallyAligned(e) then
-            if self.x + self.width/2 < e.x + e.width/2  then
-                self:collide(e, "left")
+    if self:checkCollision(other) then
+        self.tempStrength = other.tempStrength
+        if self:wasVerticallyAligned(other) then
+            if self.x + self.width/2 < other.x + other.width/2 then
+                -- TODO: add this check on the other 3 directions
+                if self:shouldCollideWith(other, "left") and other:shouldCollideWith(self, "right") then
+                    self:collide(other, "left")
+                end
             else
-                self:collide(e, "right")
+                -- here
+                self:collide(other, "right")
             end
-        elseif self:wasHorizontallyAligned(e) then
-            if self.y + self.height/2 < e.y + e.height/2 then
-                self:collide(e, "above")
+        elseif self:wasHorizontallyAligned(other) then
+            if self.y + self.height/2 < other.y + other.height/2 then
+                -- here
+                self:collide(other, "above")
             else
-                self:collide(e, "below")
+                -- and here
+                self:collide(other, "below")
             end
         end
         return true
     end
     return false
+end
+
+function Entity:shouldCollideWith(other, fromDirection)
+    return true
 end
 
 function Entity:collide(other, fromDirection)

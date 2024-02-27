@@ -73,3 +73,8 @@ function Player:collide(e, fromDirection)
         self.jumpsLeft = 2
     end
 end
+
+function Player:shouldCollideWith(other, fromDirection)
+    -- TODO: make this check if it's a "Background" tile and return false if it is
+    return false
+end
