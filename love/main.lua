@@ -4,6 +4,7 @@ function love.load()
     require "entity"
     require "player"
     require "wall"
+    require "background"
     require "box"
     player = Player(100, 100)
     objects = {
@@ -22,16 +23,19 @@ function love.load()
         {2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1},
         {2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 2},
         {2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 2},
-        {2, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+        {2, 0, 0, 0, 0, 0, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1},
         {2, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 2},
         {2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
     }
 
     for i,v in ipairs(map) do
         for j, wallType in ipairs(v) do
-            -- if wallType == 3 then create a "Background" tile instead of a Wall
             if wallType > 0 then
-                table.insert(walls, Wall((j-1)*50, (i-1)*50, wallType))
+                if wallType == 3 then
+                    table.insert(walls, Background((j-1)*50, (i-1)*50, wallType))
+                else
+                    table.insert(walls, Wall((j-1)*50, (i-1)*50, wallType))
+                end
             end
         end
     end
