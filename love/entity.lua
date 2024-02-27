@@ -53,21 +53,23 @@ function Entity:resolveCollision(other)
         self.tempStrength = other.tempStrength
         if self:wasVerticallyAligned(other) then
             if self.x + self.width/2 < other.x + other.width/2 then
-                -- TODO: add this check on the other 3 directions
                 if self:shouldCollideWith(other, "left") and other:shouldCollideWith(self, "right") then
                     self:collide(other, "left")
                 end
             else
-                -- here
-                self:collide(other, "right")
+                if self:shouldCollideWith(other, "right") and other:shouldCollideWith(self, "left") then
+                    self:collide(other, "right")
+                end
             end
         elseif self:wasHorizontallyAligned(other) then
             if self.y + self.height/2 < other.y + other.height/2 then
-                -- here
-                self:collide(other, "above")
+                if self:shouldCollideWith(other, "above") and other:shouldCollideWith(self, "below") then
+                    self:collide(other, "above")
+                end
             else
-                -- and here
-                self:collide(other, "below")
+                if self:shouldCollideWith(other, "below") and other:shouldCollideWith(self, "above") then
+                    self:collide(other, "below")
+                end
             end
         end
         return true
