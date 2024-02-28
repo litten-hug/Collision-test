@@ -67,13 +67,25 @@ function Player:jump()
     end
 end
 
+function Player:shouldCollideWith(other, fromDirection)
+    if other:is(Background) then
+        return false
+    end
+    if other:is(Wall) then
+        if fromDirection == "below" then
+            return true
+        elseif fromDirection == "left" then
+            return false
+        elseif fromDirection == "right" then
+            return false
+        end
+    end
+    return true
+end
+
 function Player:collide(e, fromDirection)
     Player.super.collide(self, e, fromDirection)
     if fromDirection == "above" then
         self.jumpsLeft = 2
     end
-end
-
-function Player:shouldCollideWith(other, fromDirection)
-    return not other:is(Background)
 end
