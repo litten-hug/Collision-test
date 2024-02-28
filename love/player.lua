@@ -34,6 +34,11 @@ function Player:update(dt)
         self.currentFrame = 1
         self.facingRight = true
     end
+    if love.keyboard.isDown("down", "s") then
+        self.image = love.graphics.newImage("assets/xavier_crouchRight.png")
+        self.idleCount = 0
+        self.currentFrame = 1
+    end
     if self.idleCount >= 3 then
         if self.facingRight == true then
             self.image = self.rightIdleFrames[math.floor(self.currentFrame)]
