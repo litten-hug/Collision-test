@@ -35,7 +35,7 @@ function Player:update(dt)
         self.facingRight = true
     end
     if love.keyboard.isDown("down", "s") then
-        self.image = love.graphics.newImage("assets/xavier_crouchRight.png")
+        -- self.image = love.graphics.newImage("assets/xavier_crouchRight.png")
         self.idleCount = 0
         self.currentFrame = 1
     end
@@ -78,11 +78,13 @@ function Player:shouldCollideWith(other, fromDirection)
     end
     if other:is(Wall) then
         if fromDirection == "below" then
-            return true
+            return false
         elseif fromDirection == "left" then
             return false
         elseif fromDirection == "right" then
             return false
+        elseif fromDirection == "above" then
+            return true
         end
     end
     return true
