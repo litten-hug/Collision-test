@@ -1,0 +1,44 @@
+made it so the box can move
+diff --git a/box.lua b/box.lua
+index 44c861a..d7f0479 100644
+--- a/box.lua
++++ b/box.lua
+@@ -2,4 +2,6 @@ Box = Entity:extend()
+
+ function Box:new(x, y)
+     Box.super.new(self, x, y, "assets/box.png")
+-end
+\ No newline at end of file
++    self.strength = 25
++end
++
+diff --git a/main.lua b/main.lua
+index 5e500bb..39df724 100644
+--- a/main.lua
++++ b/main.lua
+@@ -28,9 +28,7 @@ function love.update(dt)
+ end
+
+ function love.draw()
+-    for i,v in ipairs(objects) do
+-        v:draw()
++    for i, object in pairs(objects) do
++        object:draw()
+     end
+-    player:draw()
+-    wall:draw()
+ end
+\ No newline at end of file
+diff --git a/player.lua b/player.lua
+index fc2e721..725f1eb 100644
+--- a/player.lua
++++ b/player.lua
+@@ -2,6 +2,7 @@ Player = Entity:extend()
+
+ function Player:new(x, y)
+     Player.super.new(self, x, y, "assets/player.png")
++    self.strength = 50
+ end
+
+ function Player:update(dt)
+

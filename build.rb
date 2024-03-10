@@ -1,15 +1,33 @@
 require 'fileutils'
 
-shas = `git rev-list --all`.lines.map { |line| line.strip }
+shas = `git rev-list main`.lines.map { |line| line.strip }
 if !File.exists?(__dir__ + "/tmp")
 	Dir.mkdir __dir__ + "/tmp"
 end
 File.open(__dir__ + "/index.html", "w") do |file|
-  file.write "<html><head><title>Collision Test</title></head><body>"
+  file.write <<-html
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+body {font-family: "Gill Sans";}
+a {
+  background-color: blue;
+  color: white;
+  padding: 1em 1.5em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+</style>
+</head>
+<body>
+<h1>Skye's The Limit</h1>
+<p>Here are all versions of the game. You can click the link to play the game at that point in time, thanks to the magic of git!</p>
+html
   shas.each_with_index do |sha, index|
     message = `git log --format=%B -n 1 #{sha}`
     date = `git show --no-patch --no-notes --date=format:'%Y-%m-%d %H:%M:%S' --pretty='%cd' #{sha}`
-    file.write "<h1>#{date}</h1>"
+    file.write "<h2>#{date}</h2>"
     file.write "<p>#{message.lines.first}</p>"
     puts sha
     puts message
@@ -18,13 +36,13 @@ File.open(__dir__ + "/index.html", "w") do |file|
       File.write "../message", message
       `git init`
       `git remote add origin git@github.com:litten-hug/Collision-test.git`
-      `git fetch --depth 1 origin #{sha}`
-      `git checkout FETCH_HEAD`
+      `git fetch --quiet --depth 1 origin #{sha}`
+      `git checkout --quiet FETCH_HEAD`
+      `rm -rf .git`
       if File.exists? "package.json"
         `pnpm install`
         `pnpm build`
-        file.write "<a href='./tmp/#{index}-#{sha}/src/public/index.html'>Play!</a>"
-        file.write "<iframe src='./tmp/#{index}-#{sha}/src/public/index.html'></iframe>"
+        file.write "<div><a href='./tmp/#{index}-#{sha}/src/public/index.html'>Play!</a></div>"
       end
     end
   end
