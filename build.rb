@@ -33,7 +33,7 @@ html
       if File.exists? "package.json"
         `pnpm install`
         `pnpm build`
-        file.write "<a class='button' href='./commit/#{index}-#{sha}/src/public/index.html'>Play!</a>"
+        file.write "<p><a class='button' href='./commit/#{index}-#{sha}/src/public/index.html'>Play!</a></p>"
       end
     end
   end
