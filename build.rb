@@ -9,16 +9,7 @@ File.open(__dir__ + "/index.html", "w") do |file|
 <!DOCTYPE html>
 <html>
 <head>
-<style>
-body {font-family: "Gill Sans";}
-a {
-  background-color: blue;
-  color: white;
-  padding: 1em 1.5em;
-  text-decoration: none;
-  text-transform: uppercase;
-}
-</style>
+<link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
 </head>
 <body>
 <h1>Skye's The Limit</h1>
@@ -42,7 +33,7 @@ html
       if File.exists? "package.json"
         `pnpm install`
         `pnpm build`
-        file.write "<div><a href='./commit/#{index}-#{sha}/src/public/index.html'>Play!</a></div>"
+        file.write "<a class='button' href='./commit/#{index}-#{sha}/src/public/index.html'>Play!</a>"
       end
     end
   end
