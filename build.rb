@@ -31,18 +31,18 @@ html
     file.write "<p>#{message.lines.first}</p>"
     puts sha
     puts message
-    FileUtils.mkdir_p __dir__ + "/tmp/#{index}-#{sha}/src"
-    Dir.chdir __dir__ + "/tmp/#{index}-#{sha}/src" do
-      File.write "../message", message
+    FileUtils.mkdir_p __dir__ + "/commit/#{index}-#{sha}/src"
+    Dir.chdir __dir__ + "/commit/#{index}-#{sha}/src" do
       `git init`
       `git remote add origin git@github.com:litten-hug/Collision-test.git`
       `git fetch --quiet --depth 1 origin #{sha}`
       `git checkout --quiet FETCH_HEAD`
       `rm -rf .git`
+      `rm .gitignore`
       if File.exists? "package.json"
         `pnpm install`
         `pnpm build`
-        file.write "<div><a href='./tmp/#{index}-#{sha}/src/public/index.html'>Play!</a></div>"
+        file.write "<div><a href='./commit/#{index}-#{sha}/src/public/index.html'>Play!</a></div>"
       end
     end
   end
