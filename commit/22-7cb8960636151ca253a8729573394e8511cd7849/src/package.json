@@ -1,0 +1,17 @@
+{
+  "name": "Collision-test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "love.js -m 1762560450 -c -t \"Sky's the limit\" love public",
+    "web": "http-server"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "http-server": "^14.1.1",
+    "love.js": "^11.4.1"
+  }
+}
