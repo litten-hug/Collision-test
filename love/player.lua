@@ -24,7 +24,7 @@ function Player:update(dt)
     if love.keyboard.isDown("left", "a") then
         self.x = self.x - 200 * dt
         self.image = love.graphics.newImage("assets/xavier_left.png")
-        self.idleCount = -1000
+        self.idleCount = 0
         self.currentFrame = 1
         self.facingRight = false
     elseif love.keyboard.isDown("right", "d") then
