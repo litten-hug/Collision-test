@@ -7,6 +7,7 @@ function Player:new(x, y)
     self.idleCount = -1000
     self.currentFrame = 1
     self.facingRight = true
+    self.crouching = false
     self.rightIdleFrames = {}
     for i = 1, 11 do
         table.insert(self.rightIdleFrames, love.graphics.newImage("assets/Animations/xavier_rightIdle_Frame" .. i .. ".png"))
@@ -35,15 +36,21 @@ function Player:update(dt)
         self.facingRight = true
     end
     if love.keyboard.isDown("down", "s") then
-        self.image = love.graphics.newImage("assets/xavier_crouchRight.png")
+        if self.facingRight == true then
+            self.image = love.graphics.newImage("assets/xavier_crouchRight.png")
+        elseif self.facingRight == false then
+            self.image = love.graphics.newImage("assets/xavier_crouchLeft.png")
+        end
         self.idleCount = 0
         self.currentFrame = 1
+        self.crouching = true
     else
         if self.facingRight == true then
             self.image = love.graphics.newImage("assets/xavier_right.png")
         elseif self.facingRight == false then
             self.image = love.graphics.newImage("assets/xavier_left.png")
         end
+        self.crouching = false
     end
     if self.idleCount >= 3 then
         if self.facingRight == true then
