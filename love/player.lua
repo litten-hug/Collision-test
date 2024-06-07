@@ -4,17 +4,22 @@ function Player:new(x, y)
     Player.super.new(self, x, y, "assets/xavier_right.png", 5.5)
     self.strength = 50
     self.jumpsLeft = 2
-    self.idleCount = -1000
-    self.currentFrame = 1
+    self.idleCount = 0
+    self.currentIdleFrame = 1
+    self.currentWalkingFrame = 1
     self.facingRight = true
     self.crouching = false
     self.rightIdleFrames = {}
     for i = 1, 11 do
-        table.insert(self.rightIdleFrames, love.graphics.newImage("assets/Animations/xavier_rightIdle_Frame" .. i .. ".png"))
+        table.insert(self.rightIdleFrames, love.graphics.newImage("assets/Animations/Idles/xavier_rightIdle_Frame" .. i .. ".png"))
     end
     self.leftIdleFrames = {}
     for i = 1, 11 do
-        table.insert(self.leftIdleFrames, love.graphics.newImage("assets/Animations/xavier_leftIdle_Frame" .. i .. ".png"))
+        table.insert(self.leftIdleFrames, love.graphics.newImage("assets/Animations/Idles/xavier_leftIdle_Frame" .. i .. ".png"))
+    end
+    self.rightWalkingFrames = {}
+    for i = 1, 15 do
+        table.insert(self.rightWalkingFrames, love.graphics.newImage("assets/animations/Walking/xavier_walkRight_frame" .. i .. ".png"))
     end
 end
 
@@ -26,13 +31,17 @@ function Player:update(dt)
         self.x = self.x - 200 * dt
         self.image = love.graphics.newImage("assets/xavier_left.png")
         self.idleCount = 0
-        self.currentFrame = 1
+        self.currentIdleFrame = 1
         self.facingRight = false
     elseif love.keyboard.isDown("right", "d") then
         self.x = self.x + 200 * dt
-        self.image = love.graphics.newImage("assets/xavier_right.png")
+        self.image = self.rightWalkingFrames[math.floor(self.currentWalkingFrame)]
+        self.currentWalkingFrame = self.currentWalkingFrame + dt * 5
+        if self.currentWalkingFrame > 16 then
+            self.currentWalkingFrame = 2
+        end
         self.idleCount = 0
-        self.currentFrame = 1
+        self.currentIdleFrame = 1
         self.facingRight = true
     end
     if love.keyboard.isDown("down", "s") then
@@ -42,7 +51,7 @@ function Player:update(dt)
             self.image = love.graphics.newImage("assets/xavier_crouchLeft.png")
         end
         self.idleCount = 0
-        self.currentFrame = 1
+        self.currentIdleFrame = 1
         self.crouching = true
     else
         if self.facingRight == true then
@@ -54,17 +63,17 @@ function Player:update(dt)
     end
     if self.idleCount >= 3 then
         if self.facingRight == true then
-            self.image = self.rightIdleFrames[math.floor(self.currentFrame)]
-            self.currentFrame = self.currentFrame + dt * 5
-            if self.currentFrame > 12 then
-                self.currentFrame = 1
+            self.image = self.rightIdleFrames[math.floor(self.currentIdleFrame)]
+            self.currentIdleFrame = self.currentIdleFrame + dt * 5
+            if self.currentIdleFrame > 12 then
+                self.currentIdleFrame = 1
                 self.idleCount = 0
             end
         elseif self.facingRight == false then
-            self.image = self.leftIdleFrames[math.floor(self.currentFrame)]
-            self.currentFrame = self.currentFrame + dt * 5
-            if self.currentFrame > 12 then
-                self.currentFrame = 1
+            self.image = self.leftIdleFrames[math.floor(self.currentIdleFrame)]
+            self.currentIdleFrame = self.currentIdleFrame + dt * 5
+            if self.currentIdleFrame > 12 then
+                self.currentIdleFrame = 1
                 self.idleCount = 0
             end
         end
@@ -76,7 +85,7 @@ function Player:jump()
         self.gravity = -700
         self.jumpsLeft = self.jumpsLeft - 1
         self.idleCount = 0
-        self.currentFrame = 1
+        self.currentIdleFrame = 1
         if self.facingRight == true then
             self.image = love.graphics.newImage("assets/xavier_right.png")
         elseif self.facingRight == false then
