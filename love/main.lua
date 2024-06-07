@@ -1,11 +1,11 @@
 function love.load()
     love.graphics.setDefaultFilter("nearest", "nearest")
-    Object = require "classic"
-    require "entity"
-    require "player"
-    require "wall"
-    require "background"
-    require "box"
+    Object = require "code/classic"
+    require "code/entity"
+    require "code/player"
+    require "code/wall"
+    require "code/background"
+    require "code/box"
     player = Player(100, 100)
     objects = {
         player, Box(400, 150)
