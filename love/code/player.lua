@@ -9,6 +9,8 @@ function Player:new(x, y)
     self.currentWalkingFrame = 1
     self.facingRight = true
     self.crouching = false
+    self.movingRight = false
+    self. movingLeft = false
     self.rightIdleFrames = {}
     for i = 1, 11 do
         table.insert(self.rightIdleFrames, love.graphics.newImage("assets/Animations/Idles/xavier_rightIdle_Frame" .. i .. ".png"))
@@ -32,6 +34,8 @@ function Player:update(dt)
     self.idleCount = self.idleCount + 1 * dt
     self.y = self.y + 200 * dt
     if love.keyboard.isDown("left", "a") then
+        self.movingRight = false
+        self.movingLeft = true
         self.x = self.x - 200 * dt
         self.image = self.leftWalkingFrames[math.floor(self.currentWalkingFrame)]
         self.currentWalkingFrame = self.currentWalkingFrame + dt * 15
@@ -41,7 +45,13 @@ function Player:update(dt)
         self.idleCount = 0
         self.currentIdleFrame = 1
         self.facingRight = false
-    elseif love.keyboard.isDown("right", "d") then
+    elseif self.movingLeft == true then
+        self.image = love.graphics.newImage("assets/xavier_Left.png")
+        self.movingLeft = false
+    end
+    if love.keyboard.isDown("right", "d") then
+        self.movingLeft = false
+        self.movingRight = true
         self.x = self.x + 200 * dt
         self.image = self.rightWalkingFrames[math.floor(self.currentWalkingFrame)]
         self.currentWalkingFrame = self.currentWalkingFrame + dt * 15
@@ -51,6 +61,9 @@ function Player:update(dt)
         self.idleCount = 0
         self.currentIdleFrame = 1
         self.facingRight = true
+    elseif self.movingRight == true then
+        self.image = love.graphics.newImage("assets/xavier_Right.png")
+        self.movingRight = false
     end
     if love.keyboard.isDown("down", "s") then
         if self.facingRight == true then
