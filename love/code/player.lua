@@ -38,7 +38,7 @@ function Player:update(dt)
         self.movingLeft = true
         self.x = self.x - 200 * dt
         self.image = self.leftWalkingFrames[math.floor(self.currentWalkingFrame)]
-        self.currentWalkingFrame = self.currentWalkingFrame + dt * 15
+        self.currentWalkingFrame = self.currentWalkingFrame + dt * 20
         if self.currentWalkingFrame > 17 then
             self.currentWalkingFrame = 5
         end
@@ -48,13 +48,14 @@ function Player:update(dt)
     elseif self.movingLeft == true then
         self.image = love.graphics.newImage("assets/xavier_Left.png")
         self.movingLeft = false
+        self.currentWalkingFrame = 1
     end
     if love.keyboard.isDown("right", "d") then
         self.movingLeft = false
         self.movingRight = true
         self.x = self.x + 200 * dt
         self.image = self.rightWalkingFrames[math.floor(self.currentWalkingFrame)]
-        self.currentWalkingFrame = self.currentWalkingFrame + dt * 15
+        self.currentWalkingFrame = self.currentWalkingFrame + dt * 20
         if self.currentWalkingFrame > 17 then
             self.currentWalkingFrame = 5
         end
@@ -64,6 +65,7 @@ function Player:update(dt)
     elseif self.movingRight == true then
         self.image = love.graphics.newImage("assets/xavier_Right.png")
         self.movingRight = false
+        self.currentWalkingFrame = 1
     end
     if love.keyboard.isDown("down", "s") then
         if self.facingRight == true then
