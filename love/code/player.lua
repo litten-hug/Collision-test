@@ -18,8 +18,12 @@ function Player:new(x, y)
         table.insert(self.leftIdleFrames, love.graphics.newImage("assets/Animations/Idles/xavier_leftIdle_Frame" .. i .. ".png"))
     end
     self.rightWalkingFrames = {}
-    for i = 1, 15 do
-        table.insert(self.rightWalkingFrames, love.graphics.newImage("assets/animations/Walking/xavier_walkRight_frame" .. i .. ".png"))
+    for i = 1, 16 do
+        table.insert(self.rightWalkingFrames, love.graphics.newImage("assets/Animations/Walking/xavier_walkRight_frame" .. i .. ".png"))
+    end
+    self.leftWalkingFrames = {}
+    for i = 1, 16 do
+        table.insert(self.leftWalkingFrames, love.graphics.newImage("assets/Animations/Walking/xavier_walkLeft_frame" .. i .. ".png"))
     end
 end
 
@@ -29,16 +33,20 @@ function Player:update(dt)
     self.y = self.y + 200 * dt
     if love.keyboard.isDown("left", "a") then
         self.x = self.x - 200 * dt
-        self.image = love.graphics.newImage("assets/xavier_left.png")
+        self.image = self.leftWalkingFrames[math.floor(self.currentWalkingFrame)]
+        self.currentWalkingFrame = self.currentWalkingFrame + dt * 15
+        if self.currentWalkingFrame > 17 then
+            self.currentWalkingFrame = 5
+        end
         self.idleCount = 0
         self.currentIdleFrame = 1
         self.facingRight = false
     elseif love.keyboard.isDown("right", "d") then
         self.x = self.x + 200 * dt
         self.image = self.rightWalkingFrames[math.floor(self.currentWalkingFrame)]
-        self.currentWalkingFrame = self.currentWalkingFrame + dt * 5
-        if self.currentWalkingFrame > 16 then
-            self.currentWalkingFrame = 2
+        self.currentWalkingFrame = self.currentWalkingFrame + dt * 15
+        if self.currentWalkingFrame > 17 then
+            self.currentWalkingFrame = 5
         end
         self.idleCount = 0
         self.currentIdleFrame = 1
@@ -53,7 +61,7 @@ function Player:update(dt)
         self.idleCount = 0
         self.currentIdleFrame = 1
         self.crouching = true
-    else
+    elseif self.crouching then
         if self.facingRight == true then
             self.image = love.graphics.newImage("assets/xavier_right.png")
         elseif self.facingRight == false then
