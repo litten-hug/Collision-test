@@ -1,4 +1,4 @@
-function love.load()
+function title.load()
 
 end
 

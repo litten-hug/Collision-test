@@ -6,5 +6,15 @@ function Box:new(x, y)
 end
 
 function Box:shouldCollideWith(other, fromDirection)
-    return not other:is(Background)
+    if other:is(Background) then
+        return false
+    end
+    if other:is(Wall) then
+        if fromDirection == "above" then
+            return true
+        else
+            return false
+        end
+    end
+    return true
 end

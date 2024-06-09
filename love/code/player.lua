@@ -10,7 +10,7 @@ function Player:new(x, y)
     self.facingRight = true
     self.crouching = false
     self.movingRight = false
-    self. movingLeft = false
+    self.movingLeft = false
     self.rightIdleFrames = {}
     for i = 1, 11 do
         table.insert(self.rightIdleFrames, love.graphics.newImage("assets/Animations/Idles/xavier_rightIdle_Frame" .. i .. ".png"))
@@ -122,14 +122,10 @@ function Player:shouldCollideWith(other, fromDirection)
         return false
     end
     if other:is(Wall) then
-        if fromDirection == "below" then
-            return false
-        elseif fromDirection == "left" then
-            return false
-        elseif fromDirection == "right" then
-            return false
-        elseif fromDirection == "above" then
+        if fromDirection == "above" then
             return true
+        else
+            return false
         end
     end
     return true
