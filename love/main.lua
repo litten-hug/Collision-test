@@ -6,6 +6,7 @@ function love.load()
     require "code/wall"
     require "code/background"
     require "code/box"
+    require "code/platform"
     player = Player(100, 100)
     objects = {
         player, Box(400, 150)
@@ -33,7 +34,9 @@ function love.load()
             if wallType > 0 then
                 if wallType == 3 then
                     table.insert(walls, Background((j-1)*50, (i-1)*50, wallType))
-                else
+                elseif wallType == 1 then
+                    table.insert(walls, Platform((j-1)*50, (i-1)*50, wallType))
+                elseif wallType == 2 then
                     table.insert(walls, Wall((j-1)*50, (i-1)*50, wallType))
                 end
             end

@@ -122,6 +122,12 @@ function Player:shouldCollideWith(other, fromDirection)
         return false
     end
     if other:is(Wall) then
+        if fromDirection == "below" then
+            self.gravity = self.gravity + 150
+        end
+        return true
+    end
+    if other:is(Platform) then
         if fromDirection == "above" then
             return true
         else
