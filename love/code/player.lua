@@ -9,6 +9,7 @@ function Player:new(x, y)
     self.idleCount = 0
     self.currentIdleFrame = 1
     self.currentWalkingFrame = 1
+    self.currentJumpingFrame = 1
     self.rightIdleFrames = {}
     for i = 1, 11 do
         table.insert(self.rightIdleFrames, love.graphics.newImage("assets/Animations/Idles/xavier_rightIdle_Frame" .. i .. ".png"))
@@ -24,6 +25,10 @@ function Player:new(x, y)
     self.leftWalkingFrames = {}
     for i = 1, 16 do
         table.insert(self.leftWalkingFrames, love.graphics.newImage("assets/Animations/Walking/xavier_walkLeft_frame" .. i .. ".png"))
+    end
+    self.leftJumpingFrames = {}
+    for i = 1, 4 do
+        table.insert(self.leftJumpingFrames, love.graphics.newImage("assets/Animations/Jumping/xavier_jumpLeft_frame" .. i .. ".png"))
     end
 end
 
@@ -87,13 +92,14 @@ function Player:update(dt)
     end
 end
 
-function Player:jump()
+function Player:jump(dt)
     if self.jumpsLeft > 0 then
         self.gravity = -700
         self.jumpsLeft = self.jumpsLeft - 1
         self.idleCount = 0
         self.currentIdleFrame = 1
         self.image = love.graphics.newImage("assets/xavier_"..self.facing..".png")
+        self.state = "jumping"
     end
 end
 
@@ -108,11 +114,7 @@ function Player:shouldCollideWith(other, fromDirection)
         return true
     end
     if other:is(Platform) then
-        if fromDirection == "above" then
-            return true
-        else
-            return false
-        end
+        return fromDirection == "above"
     end
     return true
 end
@@ -121,5 +123,8 @@ function Player:collide(e, fromDirection)
     Player.super.collide(self, e, fromDirection)
     if fromDirection == "above" then
         self.jumpsLeft = 2
+        if self.state == "jumping" then
+            self.state = "standing"
+        end
     end
 end
