@@ -2,15 +2,13 @@ Player = Entity:extend()
 
 function Player:new(x, y)
     Player.super.new(self, x, y, "assets/xavier_right.png", 5.5)
+    self.state = "standing"
+    self.facing = "right"
     self.strength = 50
     self.jumpsLeft = 2
     self.idleCount = 0
     self.currentIdleFrame = 1
     self.currentWalkingFrame = 1
-    self.facingRight = true
-    self.crouching = false
-    self.movingRight = false
-    self.movingLeft = false
     self.rightIdleFrames = {}
     for i = 1, 11 do
         table.insert(self.rightIdleFrames, love.graphics.newImage("assets/Animations/Idles/xavier_rightIdle_Frame" .. i .. ".png"))
@@ -34,8 +32,8 @@ function Player:update(dt)
     self.idleCount = self.idleCount + 1 * dt
     self.y = self.y + 200 * dt
     if love.keyboard.isDown("left", "a") then
-        self.movingRight = false
-        self.movingLeft = true
+        self.state = "moving"
+        self.facing = "left"
         self.x = self.x - 200 * dt
         self.image = self.leftWalkingFrames[math.floor(self.currentWalkingFrame)]
         self.currentWalkingFrame = self.currentWalkingFrame + dt * 20
@@ -44,15 +42,14 @@ function Player:update(dt)
         end
         self.idleCount = 0
         self.currentIdleFrame = 1
-        self.facingRight = false
-    elseif self.movingLeft == true then
+    elseif self.state == "moving" and self.facing == "left" then
+        self.state = "standing"
         self.image = love.graphics.newImage("assets/xavier_Left.png")
-        self.movingLeft = false
         self.currentWalkingFrame = 1
     end
     if love.keyboard.isDown("right", "d") then
-        self.movingLeft = false
-        self.movingRight = true
+        self.state = "moving"
+        self.facing = "right"
         self.x = self.x + 200 * dt
         self.image = self.rightWalkingFrames[math.floor(self.currentWalkingFrame)]
         self.currentWalkingFrame = self.currentWalkingFrame + dt * 20
@@ -61,44 +58,31 @@ function Player:update(dt)
         end
         self.idleCount = 0
         self.currentIdleFrame = 1
-        self.facingRight = true
-    elseif self.movingRight == true then
+    elseif self.state == "moving" and self.facing == "right" then
         self.image = love.graphics.newImage("assets/xavier_Right.png")
-        self.movingRight = false
+        self.state = "standing"
+        self.facing = "right"
         self.currentWalkingFrame = 1
     end
     if love.keyboard.isDown("down", "s") then
-        if self.facingRight == true then
-            self.image = love.graphics.newImage("assets/xavier_crouchRight.png")
-        elseif self.facingRight == false then
-            self.image = love.graphics.newImage("assets/xavier_crouchLeft.png")
-        end
+        self.image = love.graphics.newImage("assets/xavier_crouch"..self.facing..".png")
         self.idleCount = 0
         self.currentIdleFrame = 1
-        self.crouching = true
-    elseif self.crouching then
-        if self.facingRight == true then
-            self.image = love.graphics.newImage("assets/xavier_right.png")
-        elseif self.facingRight == false then
-            self.image = love.graphics.newImage("assets/xavier_left.png")
-        end
-        self.crouching = false
+        self.state = "crouching"
+    elseif self.state == "crouching" then
+        self.image = love.graphics.newImage("assets/xavier_"..self.facing..".png")
+        self.state = "standing"
     end
-    if self.idleCount >= 3 then
-        if self.facingRight == true then
+    if self.state == "standing" and self.idleCount >= 3 then
+        if self.facing == "right" then
             self.image = self.rightIdleFrames[math.floor(self.currentIdleFrame)]
-            self.currentIdleFrame = self.currentIdleFrame + dt * 5
-            if self.currentIdleFrame > 12 then
-                self.currentIdleFrame = 1
-                self.idleCount = 0
-            end
-        elseif self.facingRight == false then
+        elseif self.facing == "left" then
             self.image = self.leftIdleFrames[math.floor(self.currentIdleFrame)]
-            self.currentIdleFrame = self.currentIdleFrame + dt * 5
-            if self.currentIdleFrame > 12 then
-                self.currentIdleFrame = 1
-                self.idleCount = 0
-            end
+        end
+        self.currentIdleFrame = self.currentIdleFrame + dt * 5
+        if self.currentIdleFrame > 12 then
+            self.currentIdleFrame = 1
+            self.idleCount = 0
         end
     end
 end
@@ -109,11 +93,7 @@ function Player:jump()
         self.jumpsLeft = self.jumpsLeft - 1
         self.idleCount = 0
         self.currentIdleFrame = 1
-        if self.facingRight == true then
-            self.image = love.graphics.newImage("assets/xavier_right.png")
-        elseif self.facingRight == false then
-            self.image = love.graphics.newImage("assets/xavier_left.png")
-        end
+        self.image = love.graphics.newImage("assets/xavier_"..self.facing..".png")
     end
 end
 
