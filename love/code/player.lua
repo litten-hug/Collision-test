@@ -11,10 +11,10 @@ function Player:new(x, y)
     self.currentIdleFrame = 1
     self.currentWalkingFrame = 1
     self.currentJumpingFrame = 1
-    self.newRightIdleFrames = Frames("Idles/xavier_rightIdle_Frame", 1, 11)
-    self.newLeftIdleFrames = Frames("Idles/xavier_leftIdle_Frame", 1, 11)
-    self.newRightWalkingFrames = Frames("Walking/xavier_walkRight_frame", 5, 16)
-    self.newLeftWalkingFrames = Frames("Walking/xavier_walkLeft_frame", 5, 16)
+    self.rightIdleFrames = Frames("Idles/xavier_rightIdle_Frame", 1, 11, 5)
+    self.leftIdleFrames = Frames("Idles/xavier_leftIdle_Frame", 1, 11, 5)
+    self.rightWalkingFrames = Frames("Walking/xavier_walkRight_frame", 5, 16, 20)
+    self.leftWalkingFrames = Frames("Walking/xavier_walkLeft_frame", 5, 16, 20)
    self.leftJumpingFrames = {}
     for i = 1, 4 do
         table.insert(self.leftJumpingFrames, love.graphics.newImage("assets/Animations/Jumping/xavier_jumpLeft_frame" .. i .. ".png"))
@@ -29,25 +29,19 @@ function Player:update(dt)
         self.state = "walking"
         self.facing = "left"
         self.x = self.x - 200 * dt
-        self.image = self.newLeftWalkingFrames.frames[math.floor(self.currentWalkingFrame)]
-        self.currentWalkingFrame = self.currentWalkingFrame + dt * 20
-        if self.currentWalkingFrame > 17 then
-            self.currentWalkingFrame = self.newLeftWalkingFrames.loop_start
-        end
+        self.leftWalkingFrames:update(dt)
+        self.image = self.leftWalkingFrames:getFrame()
     elseif self.state == "walking" and self.facing == "left" then
-        Player.standStill(self)
+        self:standStill()
     end
     if love.keyboard.isDown("right", "d") then
         self.state = "walking"
         self.facing = "right"
         self.x = self.x + 200 * dt
-        self.image = self.newRightWalkingFrames.frames[math.floor(self.currentWalkingFrame)]
-        self.currentWalkingFrame = self.currentWalkingFrame + dt * 20
-        if self.currentWalkingFrame > 17 then
-            self.currentWalkingFrame = self.newRightWalkingFrames.loop_start
-        end
+        self.rightWalkingFrames:update(dt)
+        self.image = self.rightWalkingFrames:getFrame()
     elseif self.state == "walking" and self.facing == "right" then
-        Player.standStill(self)
+        self:standStill()
     end
     if love.keyboard.isDown("down", "s") then
         self.image = love.graphics.newImage("assets/xavier_crouch"..self.facing..".png")
@@ -58,14 +52,17 @@ function Player:update(dt)
     end
     if self.state == "standing" and self.idleCount >= 3 then
         if self.facing == "right" then
-            self.image = self.newRightIdleFrames.frames[math.floor(self.currentIdleFrame)]
+            if self.rightIdleFrames:isLastFrame() then
+                self.idleCount = 0
+            end
+            self.rightIdleFrames:update(dt)
+            self.image = self.rightIdleFrames:getFrame()
         elseif self.facing == "left" then
-            self.image = self.newLeftIdleFrames.frames[math.floor(self.currentIdleFrame)]
-        end
-        self.currentIdleFrame = self.currentIdleFrame + dt * 5
-        if self.currentIdleFrame > 12 then
-            self.currentIdleFrame = 1
-            self.idleCount = 0
+            if self.leftIdleFrames:isLastFrame() then
+                self.idleCount = 0
+            end
+            self.leftIdleFrames:update(dt)
+            self.image = self.leftIdleFrames:getFrame()
         end
     end
 end
