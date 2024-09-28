@@ -1,3 +1,4 @@
+require "code/frames"
 Player = Entity:extend()
 
 function Player:new(x, y)
@@ -10,23 +11,11 @@ function Player:new(x, y)
     self.currentIdleFrame = 1
     self.currentWalkingFrame = 1
     self.currentJumpingFrame = 1
-    self.rightIdleFrames = {}
-    for i = 1, 11 do
-        table.insert(self.rightIdleFrames, love.graphics.newImage("assets/Animations/Idles/xavier_rightIdle_Frame" .. i .. ".png"))
-    end
-    self.leftIdleFrames = {}
-    for i = 1, 11 do
-        table.insert(self.leftIdleFrames, love.graphics.newImage("assets/Animations/Idles/xavier_leftIdle_Frame" .. i .. ".png"))
-    end
-    self.rightWalkingFrames = {}
-    for i = 1, 16 do
-        table.insert(self.rightWalkingFrames, love.graphics.newImage("assets/Animations/Walking/xavier_walkRight_frame" .. i .. ".png"))
-    end
-    self.leftWalkingFrames = {}
-    for i = 1, 16 do
-        table.insert(self.leftWalkingFrames, love.graphics.newImage("assets/Animations/Walking/xavier_walkLeft_frame" .. i .. ".png"))
-    end
-    self.leftJumpingFrames = {}
+    self.newRightIdleFrames = Frames("Idles/xavier_rightIdle_Frame", 1, 11)
+    self.newLeftIdleFrames = Frames("Idles/xavier_leftIdle_Frame", 1, 11)
+    self.newRightWalkingFrames = Frames("Walking/xavier_walkRight_frame", 5, 16)
+    self.newLeftWalkingFrames = Frames("Walking/xavier_walkLeft_frame", 5, 16)
+   self.leftJumpingFrames = {}
     for i = 1, 4 do
         table.insert(self.leftJumpingFrames, love.graphics.newImage("assets/Animations/Jumping/xavier_jumpLeft_frame" .. i .. ".png"))
     end
@@ -40,10 +29,10 @@ function Player:update(dt)
         self.state = "walking"
         self.facing = "left"
         self.x = self.x - 200 * dt
-        self.image = self.leftWalkingFrames[math.floor(self.currentWalkingFrame)]
+        self.image = self.newLeftWalkingFrames.frames[math.floor(self.currentWalkingFrame)]
         self.currentWalkingFrame = self.currentWalkingFrame + dt * 20
         if self.currentWalkingFrame > 17 then
-            self.currentWalkingFrame = 5
+            self.currentWalkingFrame = self.newLeftWalkingFrames.loop_start
         end
     elseif self.state == "walking" and self.facing == "left" then
         Player.standStill(self)
@@ -52,10 +41,10 @@ function Player:update(dt)
         self.state = "walking"
         self.facing = "right"
         self.x = self.x + 200 * dt
-        self.image = self.rightWalkingFrames[math.floor(self.currentWalkingFrame)]
+        self.image = self.newRightWalkingFrames.frames[math.floor(self.currentWalkingFrame)]
         self.currentWalkingFrame = self.currentWalkingFrame + dt * 20
         if self.currentWalkingFrame > 17 then
-            self.currentWalkingFrame = 5
+            self.currentWalkingFrame = self.newRightWalkingFrames.loop_start
         end
     elseif self.state == "walking" and self.facing == "right" then
         Player.standStill(self)
@@ -69,9 +58,9 @@ function Player:update(dt)
     end
     if self.state == "standing" and self.idleCount >= 3 then
         if self.facing == "right" then
-            self.image = self.rightIdleFrames[math.floor(self.currentIdleFrame)]
+            self.image = self.newRightIdleFrames.frames[math.floor(self.currentIdleFrame)]
         elseif self.facing == "left" then
-            self.image = self.leftIdleFrames[math.floor(self.currentIdleFrame)]
+            self.image = self.newLeftIdleFrames.frames[math.floor(self.currentIdleFrame)]
         end
         self.currentIdleFrame = self.currentIdleFrame + dt * 5
         if self.currentIdleFrame > 12 then
