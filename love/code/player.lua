@@ -37,7 +37,7 @@ function Player:update(dt)
     self.idleCount = self.idleCount + 1 * dt
     self.y = self.y + 200 * dt
     if love.keyboard.isDown("left", "a") then
-        self.state = "moving"
+        self.state = "walking"
         self.facing = "left"
         self.x = self.x - 200 * dt
         self.image = self.leftWalkingFrames[math.floor(self.currentWalkingFrame)]
@@ -47,13 +47,11 @@ function Player:update(dt)
         end
         self.idleCount = 0
         self.currentIdleFrame = 1
-    elseif self.state == "moving" and self.facing == "left" then
-        self.state = "standing"
-        self.image = love.graphics.newImage("assets/xavier_Left.png")
-        self.currentWalkingFrame = 1
+    elseif self.state == "walking" and self.facing == "left" then
+        Player.standStill(self)
     end
     if love.keyboard.isDown("right", "d") then
-        self.state = "moving"
+        self.state = "walking"
         self.facing = "right"
         self.x = self.x + 200 * dt
         self.image = self.rightWalkingFrames[math.floor(self.currentWalkingFrame)]
@@ -63,11 +61,8 @@ function Player:update(dt)
         end
         self.idleCount = 0
         self.currentIdleFrame = 1
-    elseif self.state == "moving" and self.facing == "right" then
-        self.image = love.graphics.newImage("assets/xavier_Right.png")
-        self.state = "standing"
-        self.facing = "right"
-        self.currentWalkingFrame = 1
+    elseif self.state == "walking" and self.facing == "right" then
+        Player.standStill(self)
     end
     if love.keyboard.isDown("down", "s") then
         self.image = love.graphics.newImage("assets/xavier_crouch"..self.facing..".png")
@@ -90,6 +85,12 @@ function Player:update(dt)
             self.idleCount = 0
         end
     end
+end
+
+function Player:standStill()
+    self.state = "standing"
+    self.image = love.graphics.newImage("assets/xavier_"..self.facing..".png")
+    self.currentWalkingFrame = 1
 end
 
 function Player:jump(dt)
