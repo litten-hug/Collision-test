@@ -45,8 +45,6 @@ function Player:update(dt)
         if self.currentWalkingFrame > 17 then
             self.currentWalkingFrame = 5
         end
-        self.idleCount = 0
-        self.currentIdleFrame = 1
     elseif self.state == "walking" and self.facing == "left" then
         Player.standStill(self)
     end
@@ -59,15 +57,11 @@ function Player:update(dt)
         if self.currentWalkingFrame > 17 then
             self.currentWalkingFrame = 5
         end
-        self.idleCount = 0
-        self.currentIdleFrame = 1
     elseif self.state == "walking" and self.facing == "right" then
         Player.standStill(self)
     end
     if love.keyboard.isDown("down", "s") then
         self.image = love.graphics.newImage("assets/xavier_crouch"..self.facing..".png")
-        self.idleCount = 0
-        self.currentIdleFrame = 1
         self.state = "crouching"
     elseif self.state == "crouching" then
         self.image = love.graphics.newImage("assets/xavier_"..self.facing..".png")
@@ -91,6 +85,8 @@ function Player:standStill()
     self.state = "standing"
     self.image = love.graphics.newImage("assets/xavier_"..self.facing..".png")
     self.currentWalkingFrame = 1
+    self.idleCount = 0
+    self.currentIdleFrame = 1
 end
 
 function Player:jump(dt)
