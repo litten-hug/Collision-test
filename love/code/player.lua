@@ -15,7 +15,7 @@ function Player:new(x, y)
     self.leftIdleFrames = Frames("Idles/xavier_leftIdle_Frame", 1, 11, 5)
     self.rightWalkingFrames = Frames("Walking/xavier_walkRight_frame", 5, 16, 20)
     self.leftWalkingFrames = Frames("Walking/xavier_walkLeft_frame", 5, 16, 20)
-   self.leftJumpingFrames = {}
+    self.leftJumpingFrames = {}
     for i = 1, 4 do
         table.insert(self.leftJumpingFrames, love.graphics.newImage("assets/Animations/Jumping/xavier_jumpLeft_frame" .. i .. ".png"))
     end
@@ -52,11 +52,12 @@ function Player:update(dt)
     end
     if self.state == "standing" and self.idleCount >= 3 then
         if self.facing == "right" then
+            self.rightIdleFrames:update(dt)
+            print(self.idleCount)
+            self.image = self.rightIdleFrames:getFrame()
             if self.rightIdleFrames:isLastFrame() then
                 self.idleCount = 0
             end
-            self.rightIdleFrames:update(dt)
-            self.image = self.rightIdleFrames:getFrame()
         elseif self.facing == "left" then
             if self.leftIdleFrames:isLastFrame() then
                 self.idleCount = 0
@@ -102,8 +103,8 @@ function Player:shouldCollideWith(other, fromDirection)
     return true
 end
 
-function Player:collide(e, fromDirection)
-    Player.super.collide(self, e, fromDirection)
+function Player:collide(other, fromDirection)
+    Player.super.collide(self, other, fromDirection)
     if fromDirection == "above" then
         self.jumpsLeft = 2
         if self.state == "jumping" then
