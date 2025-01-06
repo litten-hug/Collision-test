@@ -1,12 +1,15 @@
 Frames = Object:extend()
 
-function Frames:new(filePath, loopStart, loopEnd, animationSpeed)
+function Frames:new(filePath, options)
+    if options.loopEnd == nil then
+        error("loopEnd is manadatory")
+    end
+    self.loopEnd = options.loopEnd
+    self.animationSpeed = options.animationSpeed or 5
+    self.loopStart = options.loopStart or 1
     self.frames = {}
     self.currentFrame = 1
-    self.animationSpeed = animationSpeed
-    self.loopEnd = loopEnd
-    self.loopStart = loopStart
-    for i = 1, loopEnd do
+    for i = 1, self.loopEnd do
         table.insert(self.frames, love.graphics.newImage("assets/Animations/" .. filePath .. i .. ".png"))
     end
 end

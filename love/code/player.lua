@@ -11,10 +11,10 @@ function Player:new(x, y)
     self.currentIdleFrame = 1
     self.currentWalkingFrame = 1
     self.currentJumpingFrame = 1
-    self.rightIdleFrames = Frames("Idles/xavier_rightIdle_Frame", 1, 11, 5)
-    self.leftIdleFrames = Frames("Idles/xavier_leftIdle_Frame", 1, 11, 5)
-    self.rightWalkingFrames = Frames("Walking/xavier_walkRight_frame", 5, 16, 20)
-    self.leftWalkingFrames = Frames("Walking/xavier_walkLeft_frame", 5, 16, 20)
+    self.rightIdleFrames = Frames("Idles/xavier_rightIdle_Frame", {loopEnd = 11})
+    self.leftIdleFrames = Frames("Idles/xavier_leftIdle_Frame", {loopEnd = 11})
+    self.rightWalkingFrames = Frames("Walking/xavier_walkRight_frame", {loopStart = 5, loopEnd = 16, animationSpeed = 20})
+    self.leftWalkingFrames = Frames("Walking/xavier_walkLeft_frame", {loopStart = 5, loopEnd = 16, animationSpeed = 20})
     self.leftJumpingFrames = {}
     for i = 1, 4 do
         table.insert(self.leftJumpingFrames, love.graphics.newImage("assets/Animations/Jumping/xavier_jumpLeft_frame" .. i .. ".png"))
