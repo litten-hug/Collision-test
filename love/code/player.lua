@@ -53,14 +53,15 @@ function Player:update(dt)
     if self.state == "standing" and self.idleCount >= 3 then
         if self.facing == "right" then
             self.rightIdleFrames:update(dt)
-            print(self.idleCount)
             self.image = self.rightIdleFrames:getFrame()
             if self.rightIdleFrames:isLastFrame() then
                 self.idleCount = 0
+                self.rightIdleFrames:reset()
             end
         elseif self.facing == "left" then
             if self.leftIdleFrames:isLastFrame() then
                 self.idleCount = 0
+                self.leftIdleFrames:reset()
             end
             self.leftIdleFrames:update(dt)
             self.image = self.leftIdleFrames:getFrame()

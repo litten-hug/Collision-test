@@ -23,5 +23,9 @@ function Frames:getFrame()
 end
 
 function Frames:isLastFrame()
-    return self.currentFrame == self.loopEnd
+    return self.currentFrame >= self.loopEnd
+end
+
+function Frames:reset()
+    self.currentFrame = self.loopStart
 end
