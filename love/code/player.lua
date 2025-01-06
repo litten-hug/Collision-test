@@ -11,8 +11,8 @@ function Player:new(x, y)
     self.currentIdleFrame = 1
     self.currentWalkingFrame = 1
     self.currentJumpingFrame = 1
-    self.rightIdleFrames = Frames("Idles/xavier_rightIdle_Frame", {loopEnd = 11})
-    self.leftIdleFrames = Frames("Idles/xavier_leftIdle_Frame", {loopEnd = 11})
+    self.rightIdleFrames = Frames("Idles/xavier_rightIdle_Frame", {loopEnd = 15, animationSpeed = 10})
+    self.leftIdleFrames = Frames("Idles/xavier_leftIdle_Frame", {loopEnd = 15, animationSpeed = 10})
     self.rightWalkingFrames = Frames("Walking/xavier_walkRight_frame", {loopStart = 5, loopEnd = 16, animationSpeed = 20})
     self.leftWalkingFrames = Frames("Walking/xavier_walkLeft_frame", {loopStart = 5, loopEnd = 16, animationSpeed = 20})
     self.leftJumpingFrames = {}
@@ -46,6 +46,7 @@ function Player:update(dt)
     if love.keyboard.isDown("down", "s") then
         self.image = love.graphics.newImage("assets/xavier_crouch"..self.facing..".png")
         self.state = "crouching"
+        self.idleCount = 0
     elseif self.state == "crouching" then
         self.image = love.graphics.newImage("assets/xavier_"..self.facing..".png")
         self.state = "standing"
